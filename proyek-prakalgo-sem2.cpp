@@ -38,43 +38,167 @@ string to_space(string text) {
 	return text;
 }
 
+//============ ID Tiket
+string buatidtiket () {
+	return "VO" + to_string(jumlahpembeli + 1);
+}
 
+//============ Harga Tiket
 int hargatiket(char baris) {
-	if(baris == 'A') return 750000;
-	else if(baris == 'B' || baris == 'C') return 500000;
-	else return 200000;
+	if (baris == 'A'){
+		return 750000;
+	} else if (baris == 'B' || baris == 'C') {
+		return 500000;
+	} else {
+		return 200000;
 	}
-	
-string kategoriseat(char baris) {
-	if(baris == 'A') return "CAT 1";
-	else if(baris == 'B' || baris == 'C') return "CAT 2";
-	else return "CAT 3";
-	}
+}
 
+//============ Kategori Tiket
+string kategoriseat(char baris) {
+	if(baris == 'A') {
+		return "CAT 1";
+	} else if(baris == 'B' || baris == 'C') {
+		return "CAT 2";
+	} else {
+		return "CAT 3";
+	}
+}
+
+
+//=============================================== SIMPAN FILE ==========================================
 void savefile() {
     ofstream file("tiket.txt");
 
     for(int i = 0; i < jumlahpembeli; i++) {
-        file << tiket[i].nama << " "
-             << tiket[i].idTiket << " "
-             << tiket[i].kategori << " "
-             << tiket[i].baris << " "
-             << tiket[i].kolom << " "
-             << tiket[i].harga << endl;
+        file << to_underscore(kursi[i].nama) << " "
+             << kursi[i].idtiket << " "
+             << to_underscore(kursi[i].kategori) << " "
+             << kursi[i].baris << " "
+             << kursi[i].kolom << " "
+             << kursi[i].harga << endl;
     }
 
     file.close();
 }
 
-void pesantiket () {
-	pembeli *p = &tiket[jumlahpembeli];
-	
+//================================================ BACA FILE =============================================
+void readfile () {
+	ifstream file ("tiket.txt");
+
+	if (!file) {
+		return;
 	}
 
-void layout() {
-	
+	while (
+		jumlahpembeli < 50 &&
+		file >> kursi[jumlahpembeli].nama >>
+				kursi[jumlahpembeli].idtiket >>
+				kursi[jumlahpembeli].kategori >>
+				kursi[jumlahpembeli].baris >>
+				kursi[jumlahpembeli].kolom >>
+				kursi[jumlahpembeli].harga
+	) {
+		kursi[jumlahpembeli].nama = to_space(kursi[jumlahpembeli].nama);
+		kursi[jumlahpembeli].kategori = to_space(kursi[jumlahpembeli].kategori);
+		
+		int indexbaris = kursi[jumlahpembeli].baris - 'A';
+		int indexkolom = kursi[jumlahpembeli].kolom - 1;
+
+		if (indexbaris >= 0 && indexbaris < 5 && indexkolom >= 0 && indexkolom < 10) {
+			seat[indexbaris][indexkolom] = 'X';
+		}
+		jumlahpembeli++;
 	}
+	file.close();
+}
+
+
+//========================================================== Menu ke-1 : Lihat Layout Seat ===========================================================
+void lihat_layout_seat() {
+	cout << "\n+======= LAYOUT SEAT VETERAN ORCHESTRA =======+\n";
+	cout <<   "| Keterangan : 0 = Kosong, X = Terisi" << endl << endl;
+	for (int i = 0; i < 5; i++) {
+		char hurufbaris = 'A' + i;
+
+		if (hurufbaris == 'A') {
+			cout << "CAT 1 (VIP) -> Rp750.000,00" << endl;
+		} else if (hurufbaris == 'B' || hurufbaris == 'C') {
+			cout << "CAT 2 (REGULAR) -> Rp500.000,00" << endl;
+		} else if (hurufbaris == 'D' || hurufbaris == 'E') {
+			cout << "CAT 3 (ECONOMY) -> Rp200.000,00" << endl;
+		}
+
+		for (int j = 0; j < 10; j++) {
+			if (seat[i][j] == '\0') {
+                seat[i][j] = '0';
+            }
+			cout << "[" << hurufbaris << j + 1 << " " << seat[i][j] << "] ";
+		}
+
+		cout << endl << endl;
+	}
+}
+
+//============================================================= Menu ke-2 : Pesan Tiket ===========================================================
+void pesan_tiket () {
+	datapembeli p;
+
+	if (jumlahpembeli >= 50) {
+		cout << "Maaf tiket sudah habis" << endl;
+		return;
+	}
+
+	cout << "\n+========== Pesan Tiket =========+" << endl;
+
+	cin.ignore();
+	cout << "Masukkan nama pembeli  ";
+	getline (cin, p.nama);
+
+	lihat_layout_seat ();
+
+	cout << endl;
+	cout << "Masukkan baris seat (A-E): ";
+    cin >> p.baris;
+    cout << "Masukkan nomor seat (1-10): ";
+    cin >> p.kolom;
+
+    p.baris = toupper(p.baris);
+
+    int indexbaris = p.baris - 'A';
+    int indexkolom = p.kolom - 1;
+
+	if (indexbaris < 0 || indexbaris >= 5 || indexkolom < 0 || indexkolom >= 10) {
+		cout << "Seat tidak valid!" << endl;
+		return;
+	}
+
+	if (seat[indexbaris][indexkolom] == 'X') {
+		cout << "Maaf seat sudah terisi!" << endl;
+		return;
+	}
+
+	p.idtiket = buatidtiket();
+    p.kategori = kategoriseat(p.baris);
+    p.harga = hargatiket(p.baris);
+
+    seat[indexbaris][indexkolom] = 'X';
+    kursi[jumlahpembeli] = p;
+    jumlahpembeli++;
+
+    savefile();
+
+	cout << endl;
+	cout << "Tiket berhasil dipesan!" << endl;
+    cout << "ID Tiket : " << p.idtiket << endl;
+    cout << "Nama     : " << p.nama << endl;
+    cout << "Seat     : " << p.baris << p.kolom << endl;
+    cout << "Kategori : " << p.kategori << endl;
+    cout << "Harga    : Rp" << p.harga << endl;
 	
+}
+
+
 void rekursif () {
 
 }
@@ -83,7 +207,8 @@ void rekursif () {
 //================================== Login Admin untuk Menu ke-3 (Tampilkan Data Pembeli) dan ke-4 (Cari Data) ===================================
 bool login() {
     string username, password;
-			
+	
+	cout 	<< endl; 
 	cout	<< "===== LOGIN ADMIN ====="	<< endl;
 	cout	<< "Username : ";
 	cin		>> username;
@@ -104,9 +229,10 @@ bool login() {
 	}
 
 
-/*======================================================== menu ke-3 : Tampilkan Data Pembeli =================================================
+/*===================================================== Menu ke-3 : Tampilkan Data Pembeli ======================================================
 ======= output menu ke-3 : Tampilkan Data Pembeli*/
 void output_tampilkan_data_pembeli () {
+	cout << endl;
     cout << "+--------------- Data Pembeli ---------------+\n";
     if (jumlahpembeli == 0){
         cout << "Data masih kosong!"<< endl;
@@ -197,12 +323,12 @@ void menu_tampilkan_data_pembeli () {
 }
 
 
-//============================================================= menu ke-4 : Cari Data ===========================================================
+//=========================================================== Menu ke-4 : Cari Data ==============================================================
 void cari_data (){
 	string cari;
 	bool ketemu = false;
 
-	cout << "\n===== Cari Data ====="	<< endl;
+	cout << "\n+================ Cari Data =================" << endl;
 
 	cin.ignore();
 	cout << "Masukkan nama atau ID tiket : ";
@@ -227,11 +353,13 @@ void cari_data (){
 }
 
 
-//================================================================= MENU UTAMA =================================================================
+//================================================================= MENU UTAMA ==================================================================
 int main () {
 	int pilih;
-	
+	readfile ();
+
 	do {
+		cout 	<< endl;
 		cout	<< "===== VETERAN ORCHESTRA ====="	<< endl;
 		cout	<< "1. Lihat Layout Seat"			<< endl;
 		cout	<< "2. Pesan Tiket"					<< endl;
@@ -245,8 +373,10 @@ int main () {
 		switch (pilih) {
 			
 			case 1:
+				lihat_layout_seat ();
 				break;
 			case 2:
+				pesan_tiket ();
 				break;
 			case 3:
 				if(login()) {
@@ -263,6 +393,7 @@ int main () {
 				system("cls");
 				break;
 			case 5:
+				cout << "Terima kasih sudah berkunjung ke Veteran Orchestra!\n";
 				break;
 			default:
 				cout	<< "Menu Tidak Ada"	<< endl;
