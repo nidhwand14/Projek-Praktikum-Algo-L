@@ -15,9 +15,29 @@ struct datapembeli {
 	};
 	
 datapembeli kursi[50];
-int jumlah = 0;
+int jumlahpembeli = 0;
 
 char seat[5][10];
+
+//========================== STRING UNTUK FILE ============================
+string to_underscore(string text) {
+	for (int i = 0; i < text.length(); i++) {
+		if (text[i] == ' ') {
+			text[i] = '_';
+		}
+	}
+	return text;
+}
+
+string to_space(string text) {
+	for (int i = 0; i < text.length(); i++) {
+		if (text[i] == '_') {
+			text[i] = ' ';
+		}
+	}
+	return text;
+}
+
 
 int hargatiket(char baris) {
 	if(baris == 'A') return 750000;
@@ -34,7 +54,7 @@ string kategoriseat(char baris) {
 void savefile() {
     ofstream file("tiket.txt");
 
-    for(int i = 0; i < jumlah; i++) {
+    for(int i = 0; i < jumlahpembeli; i++) {
         file << tiket[i].nama << " "
              << tiket[i].idTiket << " "
              << tiket[i].kategori << " "
@@ -46,8 +66,8 @@ void savefile() {
     file.close();
 }
 
-void pesantiket  {
-	pembeli *p = &tiket[jumlah];
+void pesantiket () {
+	pembeli *p = &tiket[jumlahpembeli];
 	
 	}
 
@@ -55,7 +75,9 @@ void layout() {
 	
 	}
 	
-void rekursif
+void rekursif () {
+
+}
 	
 bool login() {
     string username, password;
@@ -78,7 +100,95 @@ bool login() {
 		return false;
 		}
 	}
-	
+
+
+//======================================================== menu ke-3 : Tampilkan Data Pembeli =================================================
+void menu_tampilkan_data_pembeli () {
+    int pilih;
+    do {
+        cout << "+------------ Lihat Data Pembeli ------------+\n";
+        cout << "1. Urutkan nama A-Z\n";
+        cout << "2. Urutkan harga termahal\n";
+        cout << "3. Urutkan harga termurah\n";
+        cout << "4. Keluar\n";
+        cout << "Pilih menu (1-5): ";
+        cin >> pilih;
+
+        switch (pilih) {
+            case 1 :
+                break;
+            case 2 :
+                break;
+            case 3 : 
+                break;
+            case 4 : 
+                break;
+            default :
+                cout << "Menu tidak valid!\n";
+                break;
+        }
+    } while (pilih != 4);
+}
+
+//======= output menu ke-3 : Tampilkan Data Pembeli
+void output_tampilkan_data_pembeli () {
+    cout << "+--------------- Data Pembeli ---------------+\n";
+    if (kursi == 0){
+        cout << "Data masih kosong!";
+    }
+
+    for (int i = 0; i < jumlahpembeli; i++){
+		datapembeli *p = &kursi[i];
+		cout << "Nama : " << p -> nama << endl;
+		cout << "ID Tiket : " << p -> idtiket << endl;
+		cout << "Seat : " << p -> baris <<  p -> kolom  << endl;
+		cout << "Kategori : " << p -> kategori << endl;
+		cout << "Harga : " << p -> harga << endl;
+    }
+    
+}
+
+//======= menu ke 1 : sorting nama A-Z dari menu utama ke-3 : Tampilkan Data Pembeli
+void sorting_nama () {
+	for (int i = 0; i < jumlahpembeli - 1; i++){
+		for (int j = 0; j < jumlahpembeli - i - 1; j++) {
+			if (kursi[j].nama > kursi[j+1].nama) {
+				datapembeli temp = kursi[j];
+				kursi[j] = kursi[j+1];
+				kursi[j+1] = temp;
+			}
+		}
+	}
+}
+
+//======= menu ke 2 : sorting harga termahal dari menu utama ke-3 : Tampilkan Data Pembeli
+void sorting_harga_termahal () {
+	for (int i = 0; i < jumlahpembeli - 1; i++){
+		for (int j = 0; j < jumlahpembeli - i - 1; j++) {
+			if (kursi[j].harga > kursi[j+1].harga) {
+				datapembeli temp = kursi[j];
+				kursi[j] = kursi[j+1];
+				kursi[j+1] = temp;
+			}
+		}
+	}
+}
+
+//======= menu ke 2 : sorting harga termurah dari menu utama ke-3 : Tampilkan Data Pembeli
+void sorting_harga_termurah () {
+	for (int i = 0; i < jumlahpembeli - 1; i++){
+		for (int j = 0; j < jumlahpembeli - i - 1; j++) {
+			if (kursi[j].harga < kursi[j+1].harga) {
+				datapembeli temp = kursi[j];
+				kursi[j] = kursi[j+1];
+				kursi[j+1] = temp;
+			}
+		}
+	}
+}
+
+
+//======================================================== MENU UTAMA ==========================================================
 int main () {
 	int pilih;
 	
@@ -96,33 +206,25 @@ int main () {
 		switch (pilih) {
 			
 			case 1:
-			
-			break;
-			
+				break;
 			case 2:
-			
-			break;
-			
+				break;
 			case 3:
-			if(login()) {
-				(); //disini taruh void tampilkan data pembeli
+				if(login()) {
+					 //disini taruh void tampilkan data pembeli
 				}
-			system("pause");
-			system("cls");
-			break;
-			
+				system("pause");
+				system("cls");
+				break;
 			case 4:
-			
-			break;
-			
+				break;
 			case 5:
-			
-			break;
-			
+				break;
 			default:
-			cout	<< "Menu Tidak Ada"	<< endl;
-			system("pause");
-			}
-		} while (pilih != 5);
-		return 0;
-	}
+				cout	<< "Menu Tidak Ada"	<< endl;
+				system("pause");
+			
+		}
+	}while (pilih != 5);
+	return 0;
+}
