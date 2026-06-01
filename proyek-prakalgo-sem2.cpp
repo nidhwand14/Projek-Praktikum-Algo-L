@@ -1,7 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <iomanip>
-#include <string>
 
 using namespace std;
 
@@ -18,6 +16,13 @@ datapembeli kursi[50];
 int jumlahpembeli = 0;
 
 char seat[5][10];
+
+void cetak_header() {
+	system("cls");
+	cout << "+=========================================================+\n"
+		 << "|                     VETERAN ORCHESTRA                   |\n"
+		 << "+=========================================================+\n";
+}
 
 //========================== STRING UNTUK FILE ============================
 string to_underscore(string text) {
@@ -116,65 +121,76 @@ void readfile () {
 
 //========================================================== Menu ke-1 : Lihat Layout Seat ===========================================================
 void lihat_layout_seat() {
-	cout << "\n+======= LAYOUT SEAT VETERAN ORCHESTRA =======+\n";
-	cout <<   "| Keterangan : 0 = Kosong, X = Terisi" << endl << endl;
+
+	cout << "+---------------------- Layout Seat ----------------------+\n";	
+	cout <<   "| Keterangan : O = Kosong, X = Terisi" << endl;
 	for (int i = 0; i < 5; i++) {
 		char hurufbaris = 'A' + i;
 
+		cout << "+\n";
+		
 		if (hurufbaris == 'A') {
-			cout << "CAT 1 (VIP) -> Rp750.000,00" << endl;
+			cout << "| CAT 1 (VIP) -> Rp750.000,00" << endl;
 		} else if (hurufbaris == 'B' || hurufbaris == 'C') {
-			cout << "CAT 2 (REGULAR) -> Rp500.000,00" << endl;
+			cout << "| CAT 2 (REGULAR) -> Rp500.000,00" << endl;
 		} else if (hurufbaris == 'D' || hurufbaris == 'E') {
-			cout << "CAT 3 (ECONOMY) -> Rp200.000,00" << endl;
+			cout << "| CAT 3 (ECONOMY) -> Rp200.000,00" << endl;
 		}
+
+		cout << "| ";
 
 		for (int j = 0; j < 10; j++) {
 			if (seat[i][j] == '\0') {
-                seat[i][j] = '0';
+                seat[i][j] = 'O';
             }
 			cout << "[" << hurufbaris << j + 1 << " " << seat[i][j] << "] ";
 		}
 
-		cout << endl << endl;
+		cout << endl;
 	}
+	cout << "+=========================================================+\n";
+
 }
 
 //============================================================= Menu ke-2 : Pesan Tiket ===========================================================
 void pesan_tiket () {
 	datapembeli p;
 
+	cetak_header ();
+	cout << "+---------------------- Pesan Tiket ----------------------+" << endl;
+
 	if (jumlahpembeli >= 50) {
-		cout << "Maaf tiket sudah habis" << endl;
+		cout << "| Maaf tiket sudah habis..." << endl;
 		return;
 	}
 
-	cout << "\n+========== Pesan Tiket =========+" << endl;
-
 	cin.ignore();
-	cout << "Masukkan nama pembeli  ";
+	cout << "| Masukkan nama pembeli  : ";
 	getline (cin, p.nama);
 
+	cout << "|\n";
 	lihat_layout_seat ();
+	cout << "|\n";
 
-	cout << endl;
-	cout << "Masukkan baris seat (A-E): ";
+	cout << "| Masukkan baris seat (A-E) : ";
     cin >> p.baris;
-    cout << "Masukkan nomor seat (1-10): ";
+    cout << "| Masukkan nomor seat (1-10) : ";
     cin >> p.kolom;
 
-    p.baris = toupper(p.baris);
+    if (p.baris >= 'a' && p.baris <= 'z') {
+    p.baris = p.baris - 32;
+	}
 
     int indexbaris = p.baris - 'A';
     int indexkolom = p.kolom - 1;
 
 	if (indexbaris < 0 || indexbaris >= 5 || indexkolom < 0 || indexkolom >= 10) {
-		cout << "Seat tidak valid!" << endl;
+		cout << "+------------------- Seat tidak valid!! ------------------+" << endl;
 		return;
 	}
 
 	if (seat[indexbaris][indexkolom] == 'X') {
-		cout << "Maaf seat sudah terisi!" << endl;
+		cout << "+---------------- Maaf seat sudah terisi! ----------------+" << endl;
 		return;
 	}
 
@@ -187,69 +203,92 @@ void pesan_tiket () {
     jumlahpembeli++;
 
     savefile();
+	cout << "+=========================================================+\n";
 
 	cout << endl;
-	cout << "Tiket berhasil dipesan!" << endl;
-    cout << "ID Tiket : " << p.idtiket << endl;
-    cout << "Nama     : " << p.nama << endl;
-    cout << "Seat     : " << p.baris << p.kolom << endl;
-    cout << "Kategori : " << p.kategori << endl;
-    cout << "Harga    : Rp" << p.harga << endl;
+	cout << "+=========================================================+\n";
+	cout << "|                   Tiket berhasil dipesan!               |" << endl;
+	cout << "+=========================================================+\n";
+    cout << "| ID Tiket : " << p.idtiket << endl;
+    cout << "| Nama     : " << p.nama << endl;
+    cout << "| Seat     : " << p.baris << p.kolom << endl;
+    cout << "| Kategori : " << p.kategori << endl;
+    cout << "| Harga    : Rp" << p.harga << endl;
+	cout << "+=========================================================+\n";
 	
 }
 
 
-void rekursif () {
 
-}
+
+
+
 
 
 //================================== Login Admin untuk Menu ke-3 (Tampilkan Data Pembeli) dan ke-4 (Cari Data) ===================================
 bool login() {
     string username, password;
 	
-	cout 	<< endl; 
-	cout	<< "===== LOGIN ADMIN ====="	<< endl;
-	cout	<< "Username : ";
+	cetak_header(); 
+	cout	<< "+---------------------- Login Admin ----------------------+" << endl;
+	cout	<< "| Username : ";
 	cin		>> username;
-	cout	<< "Password : ";
+	cout	<< "| Password : ";
 	cin		>> password;
 			
 	if(username == "nina" && password == "1431") {
+		cout << "+-------------------- Login berhasil! --------------------+" << endl;
+		system("pause");
 		system("cls");
-		cout << "Login berhasil!"	<< endl;
 		return true;
 		}
 		
 	else {
-		system("cls");
-		cout << "!!!Hanya Admin yang dapat Mengakses Data Pembeli!!!"	<< endl;
+		cout << "+-- !!!Hanya Admin yang dapat Mengakses Data Pembeli!!! --+"	<< endl;
 		return false;
 		}
-	}
+
+}
 
 
-/*===================================================== Menu ke-3 : Tampilkan Data Pembeli ======================================================
-======= output menu ke-3 : Tampilkan Data Pembeli*/
+//===================================================== Menu ke-3 : Tampilkan Data Pembeli ======================================================
+
+//====== Total pendapatan
+int total_pendapatan(int index) {
+    if (index == jumlahpembeli) {
+        return 0;
+    }
+
+    return kursi[index].harga + total_pendapatan(index + 1);
+}
+
+
+//======= output menu ke-3 : Tampilkan Data Pembeli
 void output_tampilkan_data_pembeli () {
-	cout << endl;
-    cout << "+--------------- Data Pembeli ---------------+\n";
+	cout << "|" << endl;
+	cout << "+====================== Data Pembeli =====================+\n";
     if (jumlahpembeli == 0){
-        cout << "Data masih kosong!"<< endl;
+        cout << "| Data masih kosong!"<< endl;
+		return;
     }
 
     for (int i = 0; i < jumlahpembeli; i++){
 		datapembeli *p = &kursi[i];
-		cout << "Nama : " << p -> nama << endl;
-		cout << "ID Tiket : " << p -> idtiket << endl;
-		cout << "Seat : " << p -> baris <<  p -> kolom  << endl;
-		cout << "Kategori : " << p -> kategori << endl;
-		cout << "Harga : " << p -> harga << endl;
+		cout << "| Nama : " << p -> nama << endl;
+		cout << "| ID Tiket : " << p -> idtiket << endl;
+		cout << "| Seat : " << p -> baris <<  p -> kolom  << endl;
+		cout << "| Kategori : " << p -> kategori << endl;
+		cout << "| Harga : " << p -> harga << endl;
+		cout << "+---------------------------------------------------------+" << endl;
     }
-    
+	cout << "|" << endl;
+    cout << "| Total Pendapatan : Rp" << total_pendapatan(0) << endl;
+	cout << "+=========================================================+\n";
+	system("pause");
+
 }
 
-//======= menu ke 1 : sorting nama A-Z dari menu utama ke-3 : Tampilkan Data Pembeli
+//======= menu ke 1 : sorting nama A-Z dari menu utama ke-3 (Tampilkan Data Pembeli)
 void sorting_nama () {
 	for (int i = 0; i < jumlahpembeli - 1; i++){
 		for (int j = 0; j < jumlahpembeli - i - 1; j++) {
@@ -262,7 +301,7 @@ void sorting_nama () {
 	}
 }
 
-//======= menu ke 2 : sorting harga termahal dari menu utama ke-3 : Tampilkan Data Pembeli
+//======= menu ke 2 : sorting harga termahal dari menu utama ke-3 (Tampilkan Data Pembeli)
 void sorting_harga_termahal () {
 	for (int i = 0; i < jumlahpembeli - 1; i++){
 		for (int j = 0; j < jumlahpembeli - i - 1; j++) {
@@ -275,7 +314,7 @@ void sorting_harga_termahal () {
 	}
 }
 
-//======= menu ke 2 : sorting harga termurah dari menu utama ke-3 : Tampilkan Data Pembeli
+//======= menu ke 2 : sorting harga termurah dari menu utama ke-3 (Tampilkan Data Pembeli)
 void sorting_harga_termurah () {
 	for (int i = 0; i < jumlahpembeli - 1; i++){
 		for (int j = 0; j < jumlahpembeli - i - 1; j++) {
@@ -292,12 +331,14 @@ void sorting_harga_termurah () {
 void menu_tampilkan_data_pembeli () {
     int pilih;
     do {
-        cout << "+------------ Lihat Data Pembeli ------------+\n";
-        cout << "1. Urutkan nama A-Z\n";
-        cout << "2. Urutkan harga termahal\n";
-        cout << "3. Urutkan harga termurah\n";
-        cout << "4. Keluar\n";
-        cout << "Pilih menu (1-5): ";
+		cetak_header();
+        cout << "+------------------ Lihat Data Pembeli -------------------+\n";
+        cout << "| 1. Urutkan nama A-Z\n";
+        cout << "| 2. Urutkan harga termahal\n";
+        cout << "| 3. Urutkan harga termurah\n";
+        cout << "| 4. Keluar\n";
+		cout << "+---------------------------------------------------------+\n";
+        cout << "| Pilih menu (1-4): ";
         cin >> pilih;
 
         switch (pilih) {
@@ -316,7 +357,7 @@ void menu_tampilkan_data_pembeli () {
             case 4 : 
                 break;
             default :
-                cout << "Menu tidak valid!\n";
+                cout << "+------------------- Menu tidak valid! -------------------+\n";
                 break;
         }
     } while (pilih != 4);
@@ -328,27 +369,31 @@ void cari_data (){
 	string cari;
 	bool ketemu = false;
 
-	cout << "\n+================ Cari Data =================" << endl;
+	cetak_header();
+	cout << "+----------------------- Cari Data -----------------------+" << endl;
 
 	cin.ignore();
-	cout << "Masukkan nama atau ID tiket : ";
+	cout << "| Masukkan nama atau ID tiket : ";
 	getline(cin, cari);
+	cout << "|" << endl;
 
 	for (int i = 0; i < jumlahpembeli; i++) {
 		if (kursi[i].nama == cari || kursi[i].idtiket == cari) {
-			cout << "Data ditemukan!" << endl;
-			cout << "Nama : " << kursi[i].nama << endl;
-			cout << "ID Tiket : " << kursi[i].idtiket << endl;
-			cout << "Seat : " << kursi[i].baris << kursi[i].kolom << endl;
-			cout << "Kategori : " << kursi[i].kategori << endl;
-			cout << "Harga : " << kursi[i].harga << endl;
+			if (!ketemu) {
+                cout << "+-------------------- Data ditemukan! --------------------+\n";
+            }
+			cout << "| Nama : " << kursi[i].nama << endl;
+			cout << "| ID Tiket : " << kursi[i].idtiket << endl;
+			cout << "| Seat : " << kursi[i].baris << kursi[i].kolom << endl;
+			cout << "| Kategori : " << kursi[i].kategori << endl;
+			cout << "| Harga : " << kursi[i].harga << endl;
+			cout << "+---------------------------------------------------------+\n";
 
 			ketemu = true;
-			break;
 		}
 	}
 	if (!ketemu) {
-		cout << "Data tidak ditemukan!" << endl;
+		cout << "+----------------- Data tidak ditemukan! -----------------+" << endl;
 	}
 }
 
@@ -360,23 +405,29 @@ int main () {
 
 	do {
 		cout 	<< endl;
-		cout	<< "===== VETERAN ORCHESTRA ====="	<< endl;
-		cout	<< "1. Lihat Layout Seat"			<< endl;
-		cout	<< "2. Pesan Tiket"					<< endl;
-		cout	<< "3. Tampilkan Data Pembeli"		<< endl;	//sekalian sorting (tampilkan seluruh data berdasarkan idtiket, tampilkan tiap catnya)-a
-		cout	<< "4. Cari Data"					<< endl;	//cari berdasarkan idtiket, setelah itu muncul e-ticket-a
-		cout	<< "5. Exit"						<< endl;
-		
-		cout	<< "Pilih : ";
+		cetak_header ();
+		cout	<< "| 1. Lihat Layout Seat"			<< endl;
+		cout	<< "| 2. Pesan Tiket"				<< endl;
+		cout	<< "| 3. Tampilkan Data Pembeli"	<< endl;	//sekalian sorting (tampilkan seluruh data berdasarkan idtiket, tampilkan tiap catnya)-a
+		cout	<< "| 4. Cari Data"					<< endl;	//cari berdasarkan idtiket, setelah itu muncul e-ticket-a
+		cout	<< "| 5. Exit"						<< endl;
+		cout	<< "+---------------------------------------------------------+\n";
+		cout	<< "| Pilih (1-5) : ";
 		cin		>> pilih;
+
 		
 		switch (pilih) {
 			
 			case 1:
+				cetak_header();
 				lihat_layout_seat ();
+				system("pause");
+				system("cls");
 				break;
 			case 2:
 				pesan_tiket ();
+				system("pause");
+				system("cls");
 				break;
 			case 3:
 				if(login()) {

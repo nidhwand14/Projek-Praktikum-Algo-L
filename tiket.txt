@@ -1,0 +1,15 @@
+nina VO1 CAT_2 B 7 500000
+nina VO2 CAT_3 E 10 200000
+bima_sakti VO3 CAT_1 A 5 750000
+alya_putri VO4 CAT_2 C 2 500000
+rizky_pratama VO5 CAT_3 D 8 200000
+nina VO6 CAT_1 A 1 750000
+dewi_lestari VO7 CAT_2 B 4 500000
+fadhil_ramadhan VO8 CAT_3 E 3 200000
+bima_sakti VO9 CAT_2 C 10 500000
+salsa_bila VO10 CAT_1 A 9 750000
+andika_prakoso VO11 CAT_3 D 5 200000
+putri_amelia VO12 CAT_2 B 1 500000
+nina VO13 CAT_3 E 7 200000
+zidan_fahreza VO14 CAT_1 A 3 750000
+rahmawati VO15 CAT_2 C 6 500000
