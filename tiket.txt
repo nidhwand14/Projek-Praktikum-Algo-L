@@ -13,3 +13,5 @@ putri_amelia VO12 CAT_2 B 1 500000
 nina VO13 CAT_3 E 7 200000
 zidan_fahreza VO14 CAT_1 A 3 750000
 rahmawati VO15 CAT_2 C 6 500000
+Ida VO16 CAT_1 A 8 750000
+tasya VO17 CAT_1 A 2 750000

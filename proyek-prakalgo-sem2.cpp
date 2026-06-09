@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <string>
 
 using namespace std;
 
@@ -391,22 +390,19 @@ void cari_data (){
 	
 	//sequential search (1/1)
 	for (int i = 0; i < jumlahpembeli; i++) {
-    if (kursi[i].nama.find(cari) != string::npos ||
-        kursi[i].idtiket.find(cari) != string::npos) {
-
-        if (!ketemu) {
+	if (kursi[i].nama == cari || kursi[i].idtiket == cari) {
+		if (!ketemu) {
             cout << "+-------------------- Data ditemukan! --------------------+\n";
         }
+		cout << "| Nama : " << kursi[i].nama << endl;
+		cout << "| ID Tiket : " << kursi[i].idtiket << endl;
+		cout << "| Seat : " << kursi[i].baris << kursi[i].kolom << endl;
+		cout << "| Kategori : " << kursi[i].kategori << endl;
+		cout << "| Harga : " << kursi[i].harga << endl;
+		cout << "+---------------------------------------------------------+\n";
 
-        cout << "| Nama : " << kursi[i].nama << endl;
-        cout << "| ID Tiket : " << kursi[i].idtiket << endl;
-        cout << "| Seat : " << kursi[i].baris << kursi[i].kolom << endl;
-        cout << "| Kategori : " << kursi[i].kategori << endl;
-        cout << "| Harga : " << kursi[i].harga << endl;
-        cout << "+---------------------------------------------------------+\n";
-
-        ketemu = true;
-    }
+		ketemu = true;
+	}
 }
 	if (!ketemu) {
 		cout << "+----------------- Data tidak ditemukan! -----------------+" << endl;
